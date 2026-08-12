@@ -2,7 +2,7 @@ node_modules/
 .DS_Store
 Thumbs.db
 
-# Local agent / editor tooling — not part of the published site.
+# Local agent / editor tooling — not part of the site.
 .agents/
 .claude/
 .codex/
@@ -11,3 +11,7 @@ Thumbs.db
 .impeccable/
 .kiro/
 .opencode/
+
+# Design and product documentation — kept locally, not shipped with the code.
+DESIGN.md
+PRODUCT.md

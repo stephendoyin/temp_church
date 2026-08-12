@@ -1,0 +1,496 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Come Away — design tokens.
+   Values are lifted from the Paper file; see DESIGN.md for what each one means
+   and which object in the "blue hour, high country" scene it came from.
+   --------------------------------------------------------------------------- */
+
+@theme {
+  --color-ground: #0c1015;
+  --color-raise: #151c24;
+  --color-hairline: #2a343f;
+  --color-muted: #93a1b0;
+  --color-text: #e9ecef;
+  --color-accent: #bfd3e6;
+  --color-accent-ink: #0c1015;
+
+  /* Secondary ramps. On dark: lead / session / annotation.
+     On the accent field nothing may be lighter than --color-ink-3. */
+  --color-lead: #a8b4c1;
+  --color-session: #c3cdd8;
+  --color-note: #7a8896;
+  --color-ink-1: #26333f;
+  --color-ink-2: #3b4956;
+  --color-ink-3: #46535e;
+  --color-ink-label: #4a5966;
+
+  --font-display: "EB Garamond", ui-serif, Georgia, serif;
+  --font-label: "Archivo Narrow", ui-sans-serif, system-ui, sans-serif;
+  --font-mark: "Archivo", ui-sans-serif, system-ui, sans-serif;
+
+  --tracking-caps: 0.18em;
+  --tracking-mark: 0.2em;
+  --tracking-conference: 0.66em;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* The nav is fixed; anchored sections must not slide under it. */
+    scroll-padding-top: 84px;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    background-color: var(--color-ground);
+    color: var(--color-text);
+    font-family: var(--font-display);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Visible, in-world focus. Never remove this without replacing it. */
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+  }
+
+  .on-accent :focus-visible {
+    outline-color: var(--color-accent-ink);
+  }
+
+  ::selection {
+    background-color: var(--color-accent);
+    color: var(--color-accent-ink);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Components. These exist because they are used 3+ times and carry state that
+   utility classes would scatter. Everything else stays inline in the markup.
+   --------------------------------------------------------------------------- */
+
+@layer components {
+  /* Tracked uppercase label — nav, section names, field labels, annotations. */
+  .label {
+    font-family: var(--font-label);
+    font-weight: 600;
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+  }
+
+  /* Section marker: rule with the section name at its right end.
+     The name is never placed above the heading — see DESIGN.md. */
+  .marker {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+  }
+
+  .marker__rule {
+    flex: 1 1 0%;
+    height: 1px;
+    background-color: var(--color-hairline);
+  }
+
+  .on-accent .marker__rule {
+    background-color: rgb(12 16 21 / 0.22);
+  }
+
+  /* Form field: label over value, hairline underline.
+     Focus = the rule thickens to 2px and the label goes to full ink.
+     Heavier rule means active; that is the one state convention here. */
+  .field {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgb(12 16 21 / 0.3);
+    transition: border-color 0.25s var(--ease-out-expo);
+  }
+
+  .field:focus-within {
+    border-bottom-width: 2px;
+    border-bottom-color: var(--color-accent-ink);
+    padding-bottom: calc(0.75rem - 1px);
+  }
+
+  .field:focus-within .field__label {
+    color: var(--color-accent-ink);
+  }
+
+  .field__label {
+    font-family: var(--font-label);
+    font-weight: 600;
+    font-size: 0.6875rem;
+    line-height: 1rem;
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    color: var(--color-ink-label);
+    transition: color 0.25s var(--ease-out-expo);
+  }
+
+  .field__input {
+    width: 100%;
+    background: transparent;
+    border: 0;
+    padding: 0.25rem 0 0;
+    font-family: var(--font-display);
+    font-size: 1.3125rem;
+    line-height: 2rem;
+    color: var(--color-accent-ink);
+    caret-color: var(--color-accent-ink);
+  }
+
+  .field__input:focus {
+    outline: none;
+  }
+
+  .field__input::placeholder {
+    /* Nothing on the accent field may be lighter than this. */
+    color: var(--color-ink-3);
+    opacity: 1;
+  }
+
+  /* Field in error. The message names the problem and the recovery. */
+  .field[data-invalid="true"] {
+    border-bottom-width: 2px;
+    border-bottom-color: #7a2230;
+  }
+
+  .field[data-invalid="true"] .field__label {
+    color: #7a2230;
+  }
+
+  .field__error {
+    font-family: var(--font-label);
+    font-weight: 600;
+    font-size: 0.6875rem;
+    line-height: 1rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #7a2230;
+    margin-top: 0.5rem;
+  }
+
+  /* Buttons. Solid fill, no radius, tracked label. */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    font-family: var(--font-label);
+    font-weight: 700;
+    font-size: 0.9375rem;
+    line-height: 1.125rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 0;
+    transition:
+      background-color 0.3s var(--ease-out-expo),
+      color 0.3s var(--ease-out-expo);
+  }
+
+  .btn--accent {
+    background-color: var(--color-accent);
+    color: var(--color-accent-ink);
+    padding: 1.375rem 2.5rem;
+  }
+
+  .btn--accent:hover {
+    background-color: #d6e4f2;
+  }
+
+  .btn--ink {
+    background-color: var(--color-accent-ink);
+    color: var(--color-accent);
+    padding: 1.75rem 2.125rem;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .btn--ink:hover {
+    background-color: #1b242e;
+  }
+
+  .btn__arrow {
+    flex-shrink: 0;
+    transition: transform 0.4s var(--ease-out-expo);
+  }
+
+  .btn--ink:hover .btn__arrow {
+    transform: translateX(5px);
+  }
+
+  .btn[disabled],
+  .btn[aria-busy="true"] {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .btn[aria-busy="true"] .btn__arrow {
+    transform: none;
+  }
+
+  /* Annotation — deadlines and every placeholder disclosure. */
+  .annotation {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-family: var(--font-label);
+    font-weight: 600;
+    font-size: 0.6875rem;
+    line-height: 1rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  .annotation__tick {
+    flex-shrink: 0;
+    width: 18px;
+    height: 1px;
+    margin-top: 0.5rem;
+    background-color: currentColor;
+  }
+
+  /* Section dots, right edge. */
+  .dot {
+    display: block;
+    width: 7px;
+    height: 7px;
+    border-radius: 9999px;
+    border: 1px solid rgb(233 236 239 / 0.55);
+    transition:
+      background-color 0.4s var(--ease-out-expo),
+      border-color 0.4s var(--ease-out-expo),
+      transform 0.4s var(--ease-out-expo);
+  }
+
+  .dot[aria-current="true"] {
+    background-color: var(--color-text);
+    border-color: var(--color-text);
+    transform: scale(1.18);
+  }
+
+  .dot--on-accent {
+    border-color: rgb(12 16 21 / 0.45);
+  }
+
+  .dot--on-accent[aria-current="true"] {
+    background-color: var(--color-accent-ink);
+    border-color: var(--color-accent-ink);
+  }
+
+  /* Nav underline, drawn rather than borrowed from a link decoration. */
+  .navlink {
+    position: relative;
+    padding-bottom: 3px;
+  }
+
+  .navlink::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 1px;
+    background-color: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s var(--ease-out-expo);
+  }
+
+  .navlink:hover::after,
+  .navlink[aria-current="true"]::after {
+    transform: scaleX(1);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Photography grades. Three, and staying inside them is what keeps the page
+   one place. A daylight interior dropped in ungraded is the one thing that
+   visibly leaves this world — hence the hue-rotate on .grade-interior.
+   --------------------------------------------------------------------------- */
+
+@utility grade-landscape {
+  filter: saturate(0.4) contrast(1.1) brightness(1.02);
+}
+
+@utility grade-landscape-deep {
+  filter: saturate(0.3) contrast(1.12) brightness(0.62);
+}
+
+@utility grade-interior {
+  filter: grayscale(1) contrast(1.24) brightness(0.4) sepia(0.18) hue-rotate(175deg);
+}
+
+@utility grade-portrait {
+  filter: grayscale(1) contrast(1.02) brightness(1.32);
+}
+
+/* ---------------------------------------------------------------------------
+   The one authored motion moment: sections settle upward as they arrive.
+   Content is visible by default — .reveal only takes effect once JS confirms
+   IntersectionObserver support, so a failed script leaves a readable page.
+   --------------------------------------------------------------------------- */
+
+@layer utilities {
+  .js-reveal .reveal {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  .js-reveal .reveal.is-in {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 0.9s var(--ease-out-expo),
+      transform 0.9s var(--ease-out-expo);
+  }
+
+  .js-reveal .reveal[data-delay="1"].is-in {
+    transition-delay: 0.08s;
+  }
+
+  .js-reveal .reveal[data-delay="2"].is-in {
+    transition-delay: 0.16s;
+  }
+
+  .js-reveal .reveal[data-delay="3"].is-in {
+    transition-delay: 0.24s;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .js-reveal .reveal {
+      opacity: 1;
+      transform: none;
+    }
+
+    .js-reveal .reveal.is-in {
+      transition: none;
+    }
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Short desktop viewports. The comp was drawn at 1440×900, but a real laptop
+   leaves ~700–800px of viewport after browser chrome. Without this the hero
+   headline pushes the primary action off the bottom of the first screen.
+   --------------------------------------------------------------------------- */
+
+@media (min-width: 1280px) and (max-height: 900px) {
+  #main h1 {
+    font-size: 52px;
+    line-height: 62px;
+    max-width: 560px;
+  }
+
+  .hero-copy {
+    padding-top: 6rem;
+  }
+}
+
+@media (min-width: 1280px) and (max-height: 760px) {
+  #main h1 {
+    font-size: 44px;
+    line-height: 54px;
+    max-width: 500px;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Top bar over the accent field.
+
+   Deliberately UNLAYERED. The nav links carry Tailwind colour utilities, and
+   utilities sit in a later cascade layer than @layer components — so a
+   component-layer rule loses no matter how specific it is. Unlayered styles
+   beat every layer, which is what this override needs to do.
+   --------------------------------------------------------------------------- */
+
+[data-topbar].is-on-accent .navlink {
+  color: var(--color-ink-2);
+}
+
+[data-topbar].is-on-accent [data-mark-line],
+[data-topbar].is-on-accent [data-navlink="register"],
+[data-topbar].is-on-accent .navlink[aria-current="true"] {
+  color: var(--color-accent-ink);
+}
+
+[data-topbar].is-on-accent [data-menu-open] span:not(.sr-only) {
+  background-color: var(--color-accent-ink);
+}
+
+/* ---------------------------------------------------------------------------
+   Stuck top bar. Unlayered for the same reason as the block above.
+
+   Over the hero the bar sits on the photograph's own scrim and needs nothing.
+   Past it the bar would otherwise overlap running text with no backdrop, so it
+   takes the ground of whatever section it is currently over and shrinks the
+   wordmark to a bar-height lockup.
+   --------------------------------------------------------------------------- */
+
+.topbar-inner {
+  transition:
+    padding 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-topbar] [data-mark-line] {
+  transition:
+    font-size 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    line-height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-topbar].is-stuck {
+  background-color: rgb(12 16 21 / 0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+[data-topbar].is-stuck.is-on-accent {
+  background-color: rgb(191 211 230 / 0.94);
+  border-bottom-color: rgb(12 16 21 / 0.18);
+}
+
+[data-topbar].is-stuck .topbar-inner {
+  padding-top: 0.875rem;
+  padding-bottom: 0.875rem;
+}
+
+[data-topbar].is-stuck [data-mark-line="1"] {
+  font-size: 19px;
+  line-height: 21px;
+  letter-spacing: 0.22em;
+}
+
+[data-topbar].is-stuck [data-mark-line="2"] {
+  font-size: 11px;
+  line-height: 13px;
+  letter-spacing: 0.72em;
+  margin-top: 0.25rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .topbar-inner,
+  [data-topbar] [data-mark-line] {
+    transition: none;
+  }
+}

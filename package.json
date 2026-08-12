@@ -1,0 +1,14 @@
+{
+  "name": "come-away-conference",
+  "version": "1.0.0",
+  "private": true,
+  "description": "One-page site for the Come Away conference. Static; deploys to GitHub Pages.",
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./assets/css/site.css --minify",
+    "dev": "tailwindcss -i ./src/input.css -o ./assets/css/site.css --watch"
+  },
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.1.13",
+    "tailwindcss": "^4.1.13"
+  }
+}

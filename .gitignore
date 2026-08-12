@@ -1,0 +1,13 @@
+node_modules/
+.DS_Store
+Thumbs.db
+
+# Local agent / editor tooling — not part of the published site.
+.agents/
+.claude/
+.codex/
+.cursor/
+.gemini/
+.impeccable/
+.kiro/
+.opencode/

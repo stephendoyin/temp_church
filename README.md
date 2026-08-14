@@ -79,21 +79,19 @@ says plainly on screen that nothing was sent. Set it before going live.
 
 ---
 
-## Placeholder content — replace before publishing
+## Content status
 
-Everything identifying is invented, at the client's request. Three of these are flagged
-visibly on the page itself; all of them need real content:
+The identity, dates, venue, line-up, and contact details are now real, supplied by the
+client (NewSong Assembly) via the 2026 flier and brand signature. Still outstanding, and
+flagged visibly on the page where relevant:
 
-| What | Where | Currently |
+| What | Where | Status |
 |---|---|---|
-| Conference and church name | throughout | *Come Away* / *Kingsfield Church* |
-| Dates | hero, Location, Register | 6–8 March 2026 |
-| Venue and address | Location | Kingsfield Hall, 118 Haywood Street, Asheville NC 28801 |
-| Capacity | Location | 480 seats |
-| Speakers, sessions, portraits | Sermons | four invented people, stock portraits |
-| Photography | hero, Location | Unsplash, hotlinked |
-| Closing date | Register | 20 February |
-| Founding year | footer | 2019 |
+| Portraits for Deji Olu-Ayeni, John Wallace, Dammy Olu-Ayeni | Line-up | "Portrait to come" slots |
+| Bio for John Wallace (and any further speakers) | Line-up | "Bio to come" |
+| Schedule overview | Schedule | awaiting the client's schedule; the detailed day-by-day breakdown is deliberately held until the conference weekend |
+| Sermon recordings | Sermons | uploaded at the end of each night of the conference |
+| Photography | hero, Schedule | Unsplash, hotlinked — replace with the client's own when available |
 
 Attendance is free and there is no pricing anywhere on the page — that is deliberate, not
 an omission.

@@ -428,10 +428,14 @@
   color: var(--color-ink-2);
 }
 
-[data-topbar].is-on-accent [data-mark-line],
 [data-topbar].is-on-accent [data-navlink="register"],
 [data-topbar].is-on-accent .navlink[aria-current="true"] {
   color: var(--color-accent-ink);
+}
+
+/* The wordmark is a white raster; on the pale field it flips to ink. */
+[data-topbar].is-on-accent [data-mark-img] {
+  filter: brightness(0);
 }
 
 [data-topbar].is-on-accent [data-menu-open] span:not(.sr-only) {
@@ -452,11 +456,24 @@
     padding 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-[data-topbar] [data-mark-line] {
+[data-topbar] [data-mark-img] {
+  height: 52px;
+  width: auto;
   transition:
-    font-size 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-    line-height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-    color 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 640px) {
+  [data-topbar] [data-mark-img] {
+    height: 64px;
+  }
+}
+
+@media (min-width: 1280px) {
+  [data-topbar] [data-mark-img] {
+    height: 84px;
+  }
 }
 
 [data-topbar].is-stuck {
@@ -475,22 +492,13 @@
   padding-bottom: 0.875rem;
 }
 
-[data-topbar].is-stuck [data-mark-line="1"] {
-  font-size: 19px;
-  line-height: 21px;
-  letter-spacing: 0.22em;
-}
-
-[data-topbar].is-stuck [data-mark-line="2"] {
-  font-size: 11px;
-  line-height: 13px;
-  letter-spacing: 0.72em;
-  margin-top: 0.25rem;
+[data-topbar].is-stuck [data-mark-img] {
+  height: 38px;
 }
 
 @media (prefers-reduced-motion: reduce) {
   .topbar-inner,
-  [data-topbar] [data-mark-line] {
+  [data-topbar] [data-mark-img] {
     transition: none;
   }
 }

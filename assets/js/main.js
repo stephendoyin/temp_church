@@ -315,11 +315,11 @@
 
       submitBtn.setAttribute("aria-busy", "true");
       submitBtn.disabled = true;
-      submitLabel.textContent = "Saving your place…";
+      submitLabel.textContent = "Registering…";
       if (status) status.classList.add("hidden");
 
       function succeed() {
-        submitLabel.textContent = "Place saved";
+        submitLabel.textContent = "Registered";
         if (status) {
           status.textContent =
             "Held for " + payload.name + ". A confirmation is on its way to " + payload.email + ".";
@@ -330,7 +330,7 @@
       function fail() {
         submitBtn.removeAttribute("aria-busy");
         submitBtn.disabled = false;
-        submitLabel.textContent = "Save my place";
+        submitLabel.textContent = "Register now";
         if (status) {
           status.textContent =
             "That did not go through. Check your connection and try again, or email us directly.";
@@ -342,7 +342,7 @@
         // No endpoint wired yet — show the success state so the flow can be
         // reviewed, and say plainly that nothing was sent.
         window.setTimeout(function () {
-          submitLabel.textContent = "Place saved";
+          submitLabel.textContent = "Registered";
           if (status) {
             status.textContent =
               "Demo only — no endpoint is wired, so nothing was sent. Set FORM_ENDPOINT in assets/js/main.js.";

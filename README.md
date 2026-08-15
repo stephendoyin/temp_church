@@ -58,24 +58,24 @@ stylesheet ships an unstyled page.
 
 ## Receiving registrations
 
-GitHub Pages serves static files and cannot process a form post, so the registration form
-needs a third-party endpoint.
+The form POSTs to FormSubmit (`FORM_ENDPOINT` in `assets/js/main.js`), which forwards each
+registration as an email to **newsongva@gmail.com** — no backend, no account.
 
-Open `assets/js/main.js` and set the constant at the top:
+**One-time activation:** the first submission is not delivered. FormSubmit instead sends a
+confirmation email to newsongva@gmail.com; someone must click the link in it (check spam if
+it doesn't appear). Every registration after that arrives normally, with the subject
+"Come Away registration — {name}".
 
-```js
-var FORM_ENDPOINT = "https://formspree.io/f/xxxxxxxx";
-```
-
-Anything that accepts a JSON `POST` works — Formspree, Basin, Getform, or your own
-function. The body sent is:
+To change the receiving address, edit the email in the `FORM_ENDPOINT` URL and repeat the
+activation. Any service that accepts a JSON `POST` also works (Formspree, Basin, Getform);
+the body sent is:
 
 ```json
 { "places": 2, "name": "…", "email": "…", "group": "…" }
 ```
 
-While `FORM_ENDPOINT` is empty the form still validates and shows its success state, but
-says plainly on screen that nothing was sent. Set it before going live.
+If `FORM_ENDPOINT` is ever emptied, the form still validates and shows its success state,
+but says plainly on screen that nothing was sent.
 
 ---
 

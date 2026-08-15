@@ -10,14 +10,16 @@
   /* -------------------------------------------------------------------------
      WHERE REGISTRATIONS GO
 
-     GitHub Pages serves static files and cannot process a form post, so this
-     needs a third-party endpoint. Paste a Formspree / Basin / Netlify Forms
-     URL below and submissions will POST to it as JSON.
+     GitHub Pages serves static files and cannot process a form post, so
+     submissions go to FormSubmit, which forwards each one as an email to the
+     address in the URL below. One-time activation: the FIRST submission is not
+     delivered — FormSubmit instead emails that address a confirmation link,
+     and once it is clicked every subsequent registration arrives normally.
 
      Left empty, the form validates and shows the success state without sending
      anything — useful for review, useless for taking real registrations.
      ------------------------------------------------------------------------- */
-  var FORM_ENDPOINT = "";
+  var FORM_ENDPOINT = "https://formsubmit.co/ajax/newsongva@gmail.com";
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -312,6 +314,10 @@
         email: form.querySelector("#email").value.trim(),
         group: form.querySelector("#group").value.trim(),
       };
+      // FormSubmit controls: a recognizable inbox subject line, no captcha
+      // interstitial on the AJAX flow.
+      payload._subject = "Come Away registration — " + payload.name;
+      payload._captcha = "false";
 
       submitBtn.setAttribute("aria-busy", "true");
       submitBtn.disabled = true;

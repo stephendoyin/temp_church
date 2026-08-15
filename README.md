@@ -87,11 +87,13 @@ flagged visibly on the page where relevant:
 
 | What | Where | Status |
 |---|---|---|
-| Portraits for Deji Olu-Ayeni, John Wallace, Dammy Olu-Ayeni | Line-up | "Portrait to come" slots |
 | Bio for John Wallace (and any further speakers) | Line-up | "Bio to come" |
-| Schedule overview | Schedule | awaiting the client's schedule; the detailed day-by-day breakdown is deliberately held until the conference weekend |
+| Detailed schedule with assigned ministers | Schedule | overview is live; the detailed version is deliberately held until the conference weekend |
 | Sermon recordings | Sermons | uploaded at the end of each night of the conference |
 | Photography | hero, Schedule | Unsplash, hotlinked — replace with the client's own when available |
+
+John Wallace's slot uses the supplied couple photo (John and Gayla Wallace) uncropped; ask
+Stephen before cropping it or altering any supplied photo beyond the standard b/w grade.
 
 Attendance is free and there is no pricing anywhere on the page — that is deliberate, not
 an omission.

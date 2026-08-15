@@ -11,15 +11,19 @@
      WHERE REGISTRATIONS GO
 
      GitHub Pages serves static files and cannot process a form post, so
-     submissions go to FormSubmit, which forwards each one as an email to the
-     address in the URL below. One-time activation: the FIRST submission is not
-     delivered — FormSubmit instead emails that address a confirmation link,
-     and once it is clicked every subsequent registration arrives normally.
+     submissions go to the client's Google Apps Script web app, which appends
+     each registration as a row in their Google Sheet.
+
+     The script reads classic form fields, so the POST is form-encoded (never
+     JSON — that would also trigger a CORS preflight Apps Script can't answer)
+     and the field names below must stay exactly: fullName, email, howMany,
+     churchGroup.
 
      Left empty, the form validates and shows the success state without sending
      anything — useful for review, useless for taking real registrations.
      ------------------------------------------------------------------------- */
-  var FORM_ENDPOINT = "https://formsubmit.co/ajax/newsongva@gmail.com";
+  var FORM_ENDPOINT =
+    "https://script.google.com/macros/s/AKfycbzuK-LqRLKYz4sFRzIseBbxTw8oa0iygd2SJvXA5y3X6xGqdXo6KL3lkX0-AgVG-2Dm/exec";
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -314,10 +318,6 @@
         email: form.querySelector("#email").value.trim(),
         group: form.querySelector("#group").value.trim(),
       };
-      // FormSubmit controls: a recognizable inbox subject line, no captcha
-      // interstitial on the AJAX flow.
-      payload._subject = "Come Away registration — " + payload.name;
-      payload._captcha = "false";
 
       submitBtn.setAttribute("aria-busy", "true");
       submitBtn.disabled = true;
@@ -358,10 +358,17 @@
         return;
       }
 
+      // Field names must match the Apps Script's expectations exactly.
+      var body = new URLSearchParams({
+        fullName: payload.name,
+        email: payload.email,
+        howMany: String(payload.places),
+        churchGroup: payload.group,
+      });
+
       fetch(FORM_ENDPOINT, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify(payload),
+        body: body,
       })
         .then(function (response) {
           if (!response.ok) throw new Error("Bad response");

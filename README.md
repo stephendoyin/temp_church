@@ -58,24 +58,22 @@ stylesheet ships an unstyled page.
 
 ## Receiving registrations
 
-The form POSTs to FormSubmit (`FORM_ENDPOINT` in `assets/js/main.js`), which forwards each
-registration as an email to **newsongva@gmail.com** — no backend, no account.
+The form POSTs to the client's **Google Apps Script web app** (`FORM_ENDPOINT` in
+`assets/js/main.js`), which appends each registration as a row in their Google Sheet.
+The script belongs to the client's Google account; the sheet is their live registration
+list.
 
-**One-time activation:** the first submission is not delivered. FormSubmit instead sends a
-confirmation email to newsongva@gmail.com; someone must click the link in it (check spam if
-it doesn't appear). Every registration after that arrives normally, with the subject
-"Come Away registration — {name}".
+Two contracts to preserve:
 
-To change the receiving address, edit the email in the `FORM_ENDPOINT` URL and repeat the
-activation. Any service that accepts a JSON `POST` also works (Formspree, Basin, Getform);
-the body sent is:
+- **Field names** are fixed by the client's script and must stay exactly
+  `fullName`, `email`, `howMany`, `churchGroup`.
+- **Encoding** must stay form-encoded (`URLSearchParams`), never JSON — the script reads
+  `e.parameter`, and a JSON `Content-Type` would also trigger a CORS preflight that Apps
+  Script cannot answer.
 
-```json
-{ "places": 2, "name": "…", "email": "…", "group": "…" }
-```
-
-If `FORM_ENDPOINT` is ever emptied, the form still validates and shows its success state,
-but says plainly on screen that nothing was sent.
+If the client redeploys the script, the `/exec` URL changes — update `FORM_ENDPOINT` to
+match. If `FORM_ENDPOINT` is ever emptied, the form still validates and shows its success
+state, but says plainly on screen that nothing was sent.
 
 ---
 

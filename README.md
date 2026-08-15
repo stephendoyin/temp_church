@@ -87,7 +87,7 @@ flagged visibly on the page where relevant:
 
 | What | Where | Status |
 |---|---|---|
-| Bio for John Wallace (and any further speakers) | Line-up | "Bio to come" |
+| Bio for John Wallace | Line-up | drafted from spiritualfathering.global; flagged on-page for confirmation. Note: that site names his wife as Suzanne, while the supplied photo is captioned Gayla — spouse omitted from the bio until the client resolves this |
 | Detailed schedule with assigned ministers | Schedule | overview is live; the detailed version is deliberately held until the conference weekend |
 | Sermon recordings | Sermons | uploaded at the end of each night of the conference |
 | Photography | hero, Schedule | Unsplash, hotlinked — replace with the client's own when available |

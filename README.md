@@ -90,7 +90,7 @@ flagged visibly on the page where relevant:
 | Bio for John Wallace | Line-up | drafted from spiritualfathering.global; flagged on-page for confirmation. Note: that site names his wife as Suzanne, while the supplied photo is captioned Gayla — spouse omitted from the bio until the client resolves this |
 | Detailed schedule with assigned ministers | Schedule | overview is live; the detailed version is deliberately held until the conference weekend |
 | Sermon recordings | Sermons | uploaded at the end of each night of the conference |
-| Photography | hero | one Unsplash hotlink remains — replace with the client's own when available |
+| Photography | hero, Schedule | two Unsplash hotlinks remain — replace with the client's own when available |
 
 John Wallace's slot uses the supplied couple photo (John and Gayla Wallace) uncropped; ask
 Stephen before cropping it or altering any supplied photo beyond the standard b/w grade.

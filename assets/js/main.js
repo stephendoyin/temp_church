@@ -210,6 +210,9 @@
     var submitBtn = form.querySelector("[data-submit]");
     var submitLabel = form.querySelector("[data-submit-label]");
     var status = form.querySelector("[data-form-status]");
+    var successEl = document.querySelector("[data-success]");
+    var successDetail = document.querySelector("[data-success-detail]");
+    var registerAgain = document.querySelector("[data-register-again]");
 
     // Attendance is free and undifferentiated, so the form asks only who is
     // coming and how many seats and meals to prepare. There is nothing to
@@ -324,11 +327,25 @@
       submitLabel.textContent = "Registering…";
       if (status) status.classList.add("hidden");
 
+      // The form is replaced wholesale by the success state: an unmissable
+      // confirmation, echoing back exactly what was saved. No email is sent,
+      // so nothing here may claim one.
       function succeed() {
-        submitLabel.textContent = "Registered";
-        if (status) {
-          status.textContent =
-            "Held for " + payload.name + ". A confirmation is on its way to " + payload.email + ".";
+        var seats = payload.places === 1 ? "one seat" : payload.places + " seats";
+
+        form.reset();
+        submitBtn.removeAttribute("aria-busy");
+        submitBtn.disabled = false;
+        submitLabel.textContent = "Register now";
+        if (status) status.classList.add("hidden");
+
+        if (successEl && successDetail) {
+          successDetail.textContent = payload.name + " — " + seats + " saved.";
+          form.classList.add("hidden");
+          successEl.classList.remove("hidden");
+          successEl.focus();
+        } else if (status) {
+          status.textContent = "Registered — " + seats + " saved for " + payload.name + ".";
           status.classList.remove("hidden");
         }
       }
@@ -345,10 +362,11 @@
       }
 
       if (!FORM_ENDPOINT) {
-        // No endpoint wired yet — show the success state so the flow can be
-        // reviewed, and say plainly that nothing was sent.
+        // No endpoint wired — say plainly that nothing was sent.
         window.setTimeout(function () {
-          submitLabel.textContent = "Registered";
+          submitBtn.removeAttribute("aria-busy");
+          submitBtn.disabled = false;
+          submitLabel.textContent = "Register now";
           if (status) {
             status.textContent =
               "Demo only — no endpoint is wired, so nothing was sent. Set FORM_ENDPOINT in assets/js/main.js.";
@@ -377,6 +395,15 @@
         .catch(fail);
     });
 
+    // "Register someone else" — bring back the (already reset) form.
+    if (registerAgain) {
+      registerAgain.addEventListener("click", function () {
+        successEl.classList.add("hidden");
+        form.classList.remove("hidden");
+        var first = form.querySelector("#name");
+        if (first) first.focus();
+      });
+    }
   }
 
   function init() {

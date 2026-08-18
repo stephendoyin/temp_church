@@ -2,28 +2,37 @@
 
 /* ---------------------------------------------------------------------------
    Come Away — design tokens.
-   Values are lifted from the Paper file; see DESIGN.md for what each one means
-   and which object in the "blue hour, high country" scene it came from.
+   The scene is the client's flyer: purple dusk with gold light through an open
+   door. Purple #300070 and gold #B08138 are sampled from the supplied
+   signature (Sign 1.png); the ground, hairlines and text are that purple
+   deepened or lifted. See DESIGN.md for what each token means.
    --------------------------------------------------------------------------- */
 
 @theme {
-  --color-ground: #0c1015;
-  --color-raise: #151c24;
-  --color-hairline: #2a343f;
-  --color-muted: #93a1b0;
-  --color-text: #e9ecef;
-  --color-accent: #bfd3e6;
-  --color-accent-ink: #0c1015;
+  --color-ground: #120b20;
+  --color-raise: #1b1230;
+  --color-hairline: #33284a;
+  --color-muted: #a79db8;
+  --color-text: #f0ebf3;
+  /* Gold, lifted from the signature's #B08138 so 12–15px caps clear AA on
+     the ground and purple ink clears AA on a gold fill. */
+  --color-accent: #c9a35c;
+  /* The signature purple. Ink on gold, and every heading, rule and control
+     on the cream Register field. */
+  --color-accent-ink: #300070;
+  /* The Register field: light through the door. The one place the page
+     inverts. */
+  --color-field: #f3e5ce;
 
   /* Secondary ramps. On dark: lead / session / annotation.
-     On the accent field nothing may be lighter than --color-ink-3. */
-  --color-lead: #a8b4c1;
-  --color-session: #c3cdd8;
-  --color-note: #7a8896;
-  --color-ink-1: #26333f;
-  --color-ink-2: #3b4956;
-  --color-ink-3: #46535e;
-  --color-ink-label: #4a5966;
+     On the cream field nothing may be lighter than --color-ink-3. */
+  --color-lead: #b8aec6;
+  --color-session: #d0c7db;
+  --color-note: #8c819d;
+  --color-ink-1: #2b1b4a;
+  --color-ink-2: #43335f;
+  --color-ink-3: #524368;
+  --color-ink-label: #554669;
 
   --font-display: "EB Garamond", ui-serif, Georgia, serif;
   --font-label: "Archivo Narrow", ui-sans-serif, system-ui, sans-serif;
@@ -107,7 +116,7 @@
   }
 
   .on-accent .marker__rule {
-    background-color: rgb(12 16 21 / 0.22);
+    background-color: rgb(48 0 112 / 0.25);
   }
 
   /* Form field: label over value, hairline underline.
@@ -117,7 +126,7 @@
     display: flex;
     flex-direction: column;
     padding-bottom: 0.75rem;
-    border-bottom: 1px solid rgb(12 16 21 / 0.3);
+    border-bottom: 1px solid rgb(48 0 112 / 0.32);
     transition: border-color 0.25s var(--ease-out-expo);
   }
 
@@ -211,7 +220,7 @@
   }
 
   .btn--accent:hover {
-    background-color: #d6e4f2;
+    background-color: #d8b672;
   }
 
   .btn--ink {
@@ -223,7 +232,7 @@
   }
 
   .btn--ink:hover {
-    background-color: #1b242e;
+    background-color: #3e0f8c;
   }
 
   .btn__arrow {
@@ -272,7 +281,7 @@
     width: 7px;
     height: 7px;
     border-radius: 9999px;
-    border: 1px solid rgb(233 236 239 / 0.55);
+    border: 1px solid rgb(240 235 243 / 0.55);
     transition:
       background-color 0.4s var(--ease-out-expo),
       border-color 0.4s var(--ease-out-expo),
@@ -286,7 +295,7 @@
   }
 
   .dot--on-accent {
-    border-color: rgb(12 16 21 / 0.45);
+    border-color: rgb(48 0 112 / 0.45);
   }
 
   .dot--on-accent[aria-current="true"] {
@@ -321,20 +330,22 @@
 
 /* ---------------------------------------------------------------------------
    Photography grades. Three, and staying inside them is what keeps the page
-   one place. A daylight interior dropped in ungraded is the one thing that
-   visibly leaves this world — hence the hue-rotate on .grade-interior.
+   one place. Landscapes are desaturated and their residual cool cast is
+   turned toward violet so the image sits in the same dusk as the ground; a
+   daylight interior dropped in ungraded is the one thing that visibly leaves
+   this world — hence the hue-rotate on .grade-interior.
    --------------------------------------------------------------------------- */
 
 @utility grade-landscape {
-  filter: saturate(0.4) contrast(1.1) brightness(1.02);
+  filter: saturate(0.45) contrast(1.1) brightness(1);
 }
 
 @utility grade-landscape-deep {
-  filter: saturate(0.3) contrast(1.12) brightness(0.62);
+  filter: saturate(0.35) sepia(0.4) hue-rotate(222deg) saturate(1.15) contrast(1.12) brightness(0.58);
 }
 
 @utility grade-interior {
-  filter: grayscale(1) contrast(1.24) brightness(0.4) sepia(0.18) hue-rotate(175deg);
+  filter: grayscale(1) contrast(1.24) brightness(0.4) sepia(0.18) hue-rotate(230deg);
 }
 
 @utility grade-portrait {
@@ -433,9 +444,19 @@
   color: var(--color-accent-ink);
 }
 
-/* The wordmark is a white raster; on the pale field it flips to ink. */
-[data-topbar].is-on-accent [data-mark-img] {
-  filter: brightness(0);
+/* The wordmark is a white raster on every dark surface. Over the cream field
+   the bar swaps to the signature in its own purple and gold — two files,
+   one shown at a time, so the brand mark is never a filtered approximation. */
+[data-topbar] [data-mark-brand] {
+  display: none;
+}
+
+[data-topbar].is-on-accent [data-mark-white] {
+  display: none;
+}
+
+[data-topbar].is-on-accent [data-mark-brand] {
+  display: block;
 }
 
 [data-topbar].is-on-accent [data-menu-open] span:not(.sr-only) {
@@ -459,9 +480,7 @@
 [data-topbar] [data-mark-img] {
   height: 62px;
   width: auto;
-  transition:
-    height 0.4s cubic-bezier(0.16, 1, 0.3, 1),
-    filter 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: height 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 @media (min-width: 640px) {
@@ -477,14 +496,14 @@
 }
 
 [data-topbar].is-stuck {
-  background-color: rgb(12 16 21 / 0.92);
+  background-color: rgb(18 11 32 / 0.92);
   backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--color-hairline);
 }
 
 [data-topbar].is-stuck.is-on-accent {
-  background-color: rgb(191 211 230 / 0.94);
-  border-bottom-color: rgb(12 16 21 / 0.18);
+  background-color: rgb(243 229 206 / 0.94);
+  border-bottom-color: rgb(48 0 112 / 0.18);
 }
 
 [data-topbar].is-stuck .topbar-inner {

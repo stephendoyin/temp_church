@@ -23,7 +23,7 @@
      anything — useful for review, useless for taking real registrations.
      ------------------------------------------------------------------------- */
   var FORM_ENDPOINT =
-    "https://script.google.com/macros/s/AKfycbzuK-LqRLKYz4sFRzIseBbxTw8oa0iygd2SJvXA5y3X6xGqdXo6KL3lkX0-AgVG-2Dm/exec";
+    "https://script.google.com/macros/s/AKfycbxduSADf-_reP0RGMlO2MKQdbpt_dVGAX7L46jCGYa08lAayJJ7Suvi7xQ5jIr3x39t/exec";
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 

@@ -348,6 +348,9 @@
           status.textContent = "Registered — " + seats + " saved for " + payload.name + ".";
           status.classList.remove("hidden");
         }
+
+        // Google Ads: count the registration now that it is actually saved.
+        fireRegistrationConversion();
       }
 
       function fail() {

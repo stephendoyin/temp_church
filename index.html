@@ -3,6 +3,30 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Google tag (gtag.js) — Google Ads conversion tracking -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18045278795"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "AW-18045278795");
+    </script>
+
+    <!--
+      Fired by assets/js/main.js once a registration has actually saved —
+      never on the button click, or failed submissions would be counted.
+    -->
+    <script>
+      function fireRegistrationConversion() {
+        gtag("event", "conversion", {
+          send_to: "AW-18045278795/ErgFCNf3-e8cEMu01JxD",
+        });
+      }
+    </script>
     <title>The Come Away Conference — September 18–20, 2026, Alexandria, VA</title>
     <meta
       name="description"

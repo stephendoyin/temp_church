@@ -1,7 +1,7 @@
 /* ===========================================================================
    Come Away — behaviour.
    No dependencies, no build step. Everything degrades: with this file blocked
-   the page still reads, the nav still jumps, and the day-choice radios still work.
+   the page still reads and the nav still jumps.
    =========================================================================== */
 
 (function () {
@@ -19,11 +19,18 @@
      and the field names below must stay exactly: fullName, email, howMany,
      churchGroup.
 
+     Between conferences the form is a 2027 updates list, not a seat booking,
+     so it no longer asks how many. It still sends howMany — tagged with
+     UPDATES_TAG — so these rows stay distinguishable from the 2026 seat
+     registrations already in the same sheet.
+
      Left empty, the form validates and shows the success state without sending
      anything — useful for review, useless for taking real registrations.
      ------------------------------------------------------------------------- */
   var FORM_ENDPOINT =
     "https://script.google.com/macros/s/AKfycbxduSADf-_reP0RGMlO2MKQdbpt_dVGAX7L46jCGYa08lAayJJ7Suvi7xQ5jIr3x39t/exec";
+
+  var UPDATES_TAG = "2027 updates";
 
   var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -206,21 +213,13 @@
     var form = document.querySelector("[data-register-form]");
     if (!form) return;
 
-    var placesInput = form.querySelector("[data-places]");
     var submitBtn = form.querySelector("[data-submit]");
     var submitLabel = form.querySelector("[data-submit-label]");
+    var idleLabel = submitLabel.textContent;
     var status = form.querySelector("[data-form-status]");
     var successEl = document.querySelector("[data-success]");
     var successDetail = document.querySelector("[data-success-detail]");
     var registerAgain = document.querySelector("[data-register-again]");
-
-    // Attendance is free and undifferentiated, so the form asks only who is
-    // coming and how many seats and meals to prepare. There is nothing to
-    // total and nothing to echo back.
-    function places() {
-      var n = parseInt(placesInput.value, 10);
-      return isNaN(n) || n < 1 ? 0 : n;
-    }
 
     /* --- Validation. Errors name the problem and the recovery. ------------ */
 
@@ -253,21 +252,14 @@
       var value = (input.value || "").trim();
 
       if (input.id === "name") {
-        if (!value) return "Enter the name your place should be held under";
+        if (!value) return "Enter your name so we know who to write to";
         return "";
       }
 
       if (input.id === "email") {
-        if (!value) return "Enter an email so we can send your confirmation";
+        if (!value) return "Enter an email so we can send you the 2027 details";
         if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value))
           return "That email is missing an @ or a domain — check it and try again";
-        return "";
-      }
-
-      if (input.id === "places") {
-        var n = parseInt(value, 10);
-        if (isNaN(n) || n < 1) return "Enter at least one place";
-        if (n > 20) return "For more than twenty, email us and we will arrange it";
         return "";
       }
 
@@ -275,7 +267,7 @@
     }
 
     function validateAll() {
-      var inputs = [form.querySelector("#name"), form.querySelector("#email"), placesInput];
+      var inputs = [form.querySelector("#name"), form.querySelector("#email")];
       var firstBad = null;
 
       inputs.forEach(function (input) {
@@ -291,7 +283,7 @@
 
     // Validate on blur, then live once the field has been corrected — nagging
     // someone mid-keystroke on their first pass is the annoying version.
-    ["#name", "#email", "#places"].forEach(function (selector) {
+    ["#name", "#email"].forEach(function (selector) {
       var input = form.querySelector(selector);
       if (!input) return;
       input.addEventListener("blur", function () {
@@ -316,7 +308,6 @@
       }
 
       var payload = {
-        places: places(),
         name: form.querySelector("#name").value.trim(),
         email: form.querySelector("#email").value.trim(),
         group: form.querySelector("#group").value.trim(),
@@ -328,24 +319,24 @@
       if (status) status.classList.add("hidden");
 
       // The form is replaced wholesale by the success state: an unmissable
-      // confirmation, echoing back exactly what was saved. No email is sent,
-      // so nothing here may claim one.
+      // confirmation, echoing back exactly what was saved. No confirmation
+      // email is sent, so nothing here may claim one — only that the client
+      // will write when 2027 is announced, which is the list's whole purpose.
       function succeed() {
-        var seats = payload.places === 1 ? "one seat" : payload.places + " seats";
-
         form.reset();
         submitBtn.removeAttribute("aria-busy");
         submitBtn.disabled = false;
-        submitLabel.textContent = "Register now";
+        submitLabel.textContent = idleLabel;
         if (status) status.classList.add("hidden");
 
         if (successEl && successDetail) {
-          successDetail.textContent = payload.name + " — " + seats + " saved.";
+          successDetail.textContent =
+            payload.name + " — we’ll write to " + payload.email + " as soon as 2027 is announced.";
           form.classList.add("hidden");
           successEl.classList.remove("hidden");
           successEl.focus();
         } else if (status) {
-          status.textContent = "Registered — " + seats + " saved for " + payload.name + ".";
+          status.textContent = "Registered for 2027 updates — " + payload.email + ".";
           status.classList.remove("hidden");
         }
 
@@ -356,7 +347,7 @@
       function fail() {
         submitBtn.removeAttribute("aria-busy");
         submitBtn.disabled = false;
-        submitLabel.textContent = "Register now";
+        submitLabel.textContent = idleLabel;
         if (status) {
           status.textContent =
             "That did not go through. Check your connection and try again, or email us directly.";
@@ -369,7 +360,7 @@
         window.setTimeout(function () {
           submitBtn.removeAttribute("aria-busy");
           submitBtn.disabled = false;
-          submitLabel.textContent = "Register now";
+          submitLabel.textContent = idleLabel;
           if (status) {
             status.textContent =
               "Demo only — no endpoint is wired, so nothing was sent. Set FORM_ENDPOINT in assets/js/main.js.";
@@ -383,7 +374,7 @@
       var body = new URLSearchParams({
         fullName: payload.name,
         email: payload.email,
-        howMany: String(payload.places),
+        howMany: UPDATES_TAG,
         churchGroup: payload.group,
       });
 
